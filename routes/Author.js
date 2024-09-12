@@ -17,14 +17,20 @@ router.post('/', async (req, res) => {
 
 // GET /authors - Barcha mualliflarni ro'yxatini olish
 router.get('/', async (req, res) => {
+  const { name } = req.query;
+  const filter = {};
+
+  if (name) {
+    filter.name = new RegExp(name, 'i'); 
+  }
+
   try {
-    const authors = await Author.find();
+    const authors = await Author.find(filter); 
     res.json(authors);
   } catch (error) {
     res.status(500).json({ message: error.message });
   }
 });
-
 // GET /authors/:id - Ma'lum bir muallifni olish
 router.get('/:id', async (req, res) => {
   try {

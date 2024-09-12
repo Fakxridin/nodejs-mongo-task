@@ -5,9 +5,9 @@ const mongoose = require('mongoose');
 const app = express()
 ;
 // Import routes
-// const booksRoute = require('./routes/books');
+const booksRoute = require('./routes/Book');
 const authorsRoute = require('./routes/Author');
-// const categoriesRoute = require('./routes/categories');
+const categoriesRoute = require('./routes/Category');
 
 dotenv.config()
 const PORT = process.env.PORT || 5000;
@@ -21,9 +21,9 @@ app.get('/', (req, res, next) => {
 })
 
 // Use routes
-// app.use('/books', booksRoute);
+app.use('/books', booksRoute);
 app.use('/authors', authorsRoute);
-// app.use('/categories', categoriesRoute);
+app.use('/categories', categoriesRoute);
 
 
 mongoose.connect(process.env.MONGO_URI)
