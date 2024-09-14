@@ -1,9 +1,9 @@
 // express kutubxonasi
+const cors = require('cors')
 const express = require('express');
 const dotenv = require('dotenv');
 const mongoose = require('mongoose');
-const app = express()
-;
+const app = express();
 // Import routes
 const booksRoute = require('./routes/Book');
 const authorsRoute = require('./routes/Author');
@@ -14,7 +14,7 @@ const PORT = process.env.PORT || 5000;
 
 // Middleware
 app.use(express.json());
-
+app.use(cors())
 
 app.get('/', (req, res, next) => {
     res.send('Kitoblar Kutubxonasi APIga xush kelibsiz!');
