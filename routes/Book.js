@@ -52,6 +52,7 @@ router.get('/:id', async (req, res) => {
 
 // Kitobni yangilash (Update)
 router.put('/:id', async (req, res) => {
+  console.log(req.body)
   try {
     // Ensure author and category references are updated
     const updatedData = {
@@ -84,5 +85,3 @@ router.delete('/:id', async (req, res) => {
 });
 
 module.exports = router;
-
-console.log(req.body)
