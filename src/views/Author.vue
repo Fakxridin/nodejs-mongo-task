@@ -83,13 +83,15 @@ const fetchAuthors = async () => {
     loading.value = true;  // Set loading to true before fetching
     try {
         const response = await axios.get('/authors');
-        authors.value = response.data;
+        // Sort the authors by creation date (assuming there is a field like `createdAt`) or reverse the array
+        authors.value = response.data.reverse(); // This will display the newest authors first
     } catch (error) {
         console.error('Error fetching authors:', error);
     } finally {
         loading.value = false;  // Set loading to false after fetching
     }
 };
+
 
 // Add or update an author
 const submitForm = async () => {
