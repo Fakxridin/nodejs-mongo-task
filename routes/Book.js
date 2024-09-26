@@ -53,13 +53,24 @@ router.get('/:id', async (req, res) => {
 // Kitobni yangilash (Update)
 router.put('/:id', async (req, res) => {
   try {
-    const book = await Book.findByIdAndUpdate(req.params.id, req.body, { new: true }).populate('author category');
+    // Ensure author and category references are updated
+    const updatedData = {
+      ...req.body,
+      author: req.body.author,
+      category: req.body.category
+    };
+
+    const book = await Book.findByIdAndUpdate(req.params.id, updatedData, { new: true })
+                           .populate('author', 'name')
+                           .populate('category', 'name');
     if (!book) return res.status(404).json({ message: 'Kitob topilmadi' });
+    
     res.status(200).json(book);
   } catch (error) {
     res.status(400).json({ message: error.message });
   }
 });
+
 
 // Kitobni o'chirish (Delete)
 router.delete('/:id', async (req, res) => {
@@ -73,3 +84,5 @@ router.delete('/:id', async (req, res) => {
 });
 
 module.exports = router;
+
+console.log(req.body)
