@@ -19,6 +19,7 @@
                 <thead>
                     <tr>
                         <th>ID</th>
+                        <th>User</th>
                         <th>Title</th>
                         <th>Author</th>
                         <th>Category</th>
@@ -27,9 +28,10 @@
                     </tr>
                 </thead>
                 <tbody>
-                    <tr v-for="book in books" :key="book.id">
+                    <tr v-for="book in books" :key="book._id">
                         <td>{{ book._id }}</td>
-                        <td>{{ book.title }}</td>
+                        <td>{{ book?.user?.email }}</td>
+                        <td>{{ book?.title }}</td>
                         <td>{{ book?.author?.name }}</td>
                         <td>{{ book?.category?.name }}</td>
                         <td>{{ book.publishedYear }}</td>

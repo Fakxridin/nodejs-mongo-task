@@ -106,7 +106,7 @@
 <script setup>
 import { ref } from 'vue';
 import { useRouter } from 'vue-router';
-import { defineExpose } from 'vue';
+import axios from '../axios'; // Your custom axios instance with baseURL set
 
 const username = ref('');
 const password = ref('');
@@ -140,28 +140,47 @@ const openRegisterModal = () => {
   modal.show();
 };
 
-const handleLogin = () => {
-  // Implement login logic here (e.g., API call)
-  console.log('Logging in with:', username.value, password.value);
-  const modalElement = document.getElementById('loginModal');
-  const modal = bootstrap.Modal.getInstance(modalElement);
-  modal.hide();
+const handleLogin = async () => {
+  try {
+    const response = await axios.post('/user/login', { email: username.value, password: password.value });
+    localStorage.setItem('token', response.data.token); // Save JWT to localStorage
+    console.log('Logged in successfully');
+    router.push('/'); // Redirect user after login, adjust the route as necessary
+  } catch (error) {
+    console.error('Login failed:', error.response.data.message);
+  } finally {
+    const modalElement = document.getElementById('loginModal');
+    const modal = bootstrap.Modal.getInstance(modalElement);
+    modal.hide();
+  }
 };
 
-const handleRegister = () => {
-  // Implement registration logic here (e.g., API call)
-  console.log('Registering with:', regUsername.value, regEmail.value, regPassword.value);
-  
-  // Close the modal after registration
-  const modalElement = document.getElementById('registerModal');
-  const modal = bootstrap.Modal.getInstance(modalElement);
-  modal.hide();
+const handleRegister = async () => {
+  if (regPassword.value !== confirmPassword.value) {
+    return console.error('Passwords do not match');
+  }
+
+  try {
+    const response = await axios.post('/user/register', {
+      email: regEmail.value,
+      password: regPassword.value,
+      username: regUsername.value,
+    });
+    console.log('Registered successfully:', response.data.message);
+    router.push('/auth'); // Redirect to login after registration, adjust as necessary
+  } catch (error) {
+    console.error('Registration failed:', error.response.data.message);
+  } finally {
+    const modalElement = document.getElementById('registerModal');
+    const modal = bootstrap.Modal.getInstance(modalElement);
+    modal.hide();
+  }
 };
 
 const handleLogout = () => {
-  // Implement logout logic here (e.g., clear tokens, user data)
-  console.log('Logging out...');
-  router.push('/'); // Adjust the path as necessary
+  localStorage.removeItem('token'); // Remove JWT from localStorage
+  console.log('Logged out');
+  router.push('/'); // Redirect after logout
 };
 
 // Expose the closeNavbar method to the parent component
