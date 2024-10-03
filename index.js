@@ -8,6 +8,7 @@ const app = express();
 const booksRoute = require('./routes/Book');
 const authorsRoute = require('./routes/Author');
 const categoriesRoute = require('./routes/Category');
+const UserRoute = require('./routes/User');
 
 dotenv.config()
 const PORT = process.env.PORT || 5000;
@@ -24,6 +25,7 @@ app.get('/', (req, res, next) => {
 app.use('/books', booksRoute);
 app.use('/authors', authorsRoute);
 app.use('/categories', categoriesRoute);
+app.use('/user', UserRoute);
 
 
 mongoose.connect(process.env.MONGO_URI)

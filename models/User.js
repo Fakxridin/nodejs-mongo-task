@@ -1,5 +1,4 @@
 const { Schema, model } = require('mongoose');
-const bcrypt = require('bcrypt'); // For password hashing
 
 const userSchema = new Schema({
   email: {

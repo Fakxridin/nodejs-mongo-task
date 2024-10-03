@@ -1,11 +1,13 @@
 const express = require('express');
 const Book = require('../models/Book');
 const router = express.Router();
+const auth = require('./authMiddleware')
 
 // Yangi kitob qo'shish (Create)
-router.post('/', async (req, res) => {
+router.post('/', auth, async (req, res) => {
   try {
-    const book = new Book(req.body);
+    const bookData = { ...req.body, user: req.user };
+    const book = new Book(bookData)
     await book.save();
     res.status(201).json(book);
   } catch (error) {
@@ -31,8 +33,12 @@ router.get('/', async (req, res) => {
         filter.category = category; 
     }
 
-    const books = await Book.find(filter).populate('author', 'name').populate('category', 'name');
-     
+    const books = await Book.find(filter)
+    .populate('author', 'name') // Populate author with only name field
+    .populate('category', 'name') // Populate category with only name field
+    .populate('user', 'email'); // Populate user with only email field
+
+    
     res.status(200).json(books);
   } catch (error) {
     res.status(500).json({ message: error.message });
